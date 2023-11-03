@@ -2,7 +2,7 @@
 <robot xmlns:xacro="http://www.ros.org/wiki/xacro"  name="robot">
 
     <!-- Includes -->
-   <!--<xacro:include filename="inertial_macros.xacro" />-->
+   <xacro:include filename="inertial_macros.xacro" />
 
     <!-- definition variables -->
 
@@ -17,43 +17,15 @@
     <xacro:property name = "hight_sensor_tower" value = "0.20"/>
 
 
-    <xacro:macro name="inertial_sphere" params="mass radius *origin">
-        <inertial>
-            <xacro:insert_block name="origin"/>
-            <mass value="${mass}" />
-            <inertia ixx="${(2/5) * mass * (radius*radius)}" ixy="0.0" ixz="0.0"
-                    iyy="${(2/5) * mass * (radius*radius)}" iyz="0.0"
-                    izz="${(2/5) * mass * (radius*radius)}" />
-        </inertial>
-    </xacro:macro>  
-
-
-    <xacro:macro name="inertial_box" params="mass x y z *origin">
-        <inertial>
-            <xacro:insert_block name="origin"/>
-            <mass value="${mass}" />
-            <inertia ixx="${(1/12) * mass * (y*y+z*z)}" ixy="0.0" ixz="0.0"
-                    iyy="${(1/12) * mass * (x*x+z*z)}" iyz="0.0"
-                    izz="${(1/12) * mass * (x*x+y*y)}" />
-        </inertial>
-    </xacro:macro>
-
-
-    <xacro:macro name="inertial_cylinder" params="mass length radius *origin">
-        <inertial>
-            <xacro:insert_block name="origin"/>
-            <mass value="${mass}" />
-            <inertia ixx="${(1/12) * mass * (3*radius*radius + length*length)}" ixy="0.0" ixz="0.0"
-                    iyy="${(1/12) * mass * (3*radius*radius + length*length)}" iyz="0.0"
-                    izz="${(1/2) * mass * (radius*radius)}" />
-        </inertial>
-    </xacro:macro>
-
     <!-- definition colors -->
     <material name = "white">
         <color rgba = "1 1 1 1" />
     </material>
-        
+
+    <material name = "green">
+        <color rgba = "0 1 0 1" />
+    </material>    
+
     <material name="orange">
         <color rgba = "1 0.3 0.1 1" />
     </material>
@@ -393,7 +365,7 @@
             <geometry>
                 <box size = "${size_item*3} ${size_item*2} ${size_item/2}"/>
             </geometry>
-            <material name = "orange"/>
+            <material name = "green"/>
         </visual>
        <xacro:inertial_box mass="0.2" x="${size_item*3}" y="${size_item*2}" z="${size_item*7/6}">
             <origin xyz= "0 0 ${-size_item/12}"  rpy="0 0 0"/>
@@ -403,7 +375,7 @@
             <geometry>
                 <cylinder radius="${size_item*0.75}" length = "${size_item*2/3}"/>
             </geometry>
-            <material name = "orange"/>
+            <material name = "green"/>
         </visual>
      
         <collision>
