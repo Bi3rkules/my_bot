@@ -1,41 +1,422 @@
 <?xml version="1.0"?>
 <robot xmlns:xacro="http://www.ros.org/wiki/xacro"  name="robot">
 
-    <material name + "white">
+    <!-- Includes -->
+   <!--<xacro:include filename="inertial_macros.xacro" />-->
+
+    <!-- definition variables -->
+
+    <xacro:property name = "length_chassis" value = "0.365"/>
+    <xacro:property name = "width_chassis" value = "0.305"/>
+    <xacro:property name = "size_item" value = "0.030"/>
+    <xacro:property name = "hight_main_robot" value = "0.1"/>
+    <xacro:property name = "diameter_rear_wheel" value = "0.083"/>
+    <xacro:property name = "width_rear_wheel" value = "0.0675"/>
+    <xacro:property name = "back_to_rear_axel" value = "0.1"/>
+    <xacro:property name = "diameter_front_wheel" value = "0.049"/>
+    <xacro:property name = "hight_sensor_tower" value = "0.20"/>
+
+
+    <xacro:macro name="inertial_sphere" params="mass radius *origin">
+        <inertial>
+            <xacro:insert_block name="origin"/>
+            <mass value="${mass}" />
+            <inertia ixx="${(2/5) * mass * (radius*radius)}" ixy="0.0" ixz="0.0"
+                    iyy="${(2/5) * mass * (radius*radius)}" iyz="0.0"
+                    izz="${(2/5) * mass * (radius*radius)}" />
+        </inertial>
+    </xacro:macro>  
+
+
+    <xacro:macro name="inertial_box" params="mass x y z *origin">
+        <inertial>
+            <xacro:insert_block name="origin"/>
+            <mass value="${mass}" />
+            <inertia ixx="${(1/12) * mass * (y*y+z*z)}" ixy="0.0" ixz="0.0"
+                    iyy="${(1/12) * mass * (x*x+z*z)}" iyz="0.0"
+                    izz="${(1/12) * mass * (x*x+y*y)}" />
+        </inertial>
+    </xacro:macro>
+
+
+    <xacro:macro name="inertial_cylinder" params="mass length radius *origin">
+        <inertial>
+            <xacro:insert_block name="origin"/>
+            <mass value="${mass}" />
+            <inertia ixx="${(1/12) * mass * (3*radius*radius + length*length)}" ixy="0.0" ixz="0.0"
+                    iyy="${(1/12) * mass * (3*radius*radius + length*length)}" iyz="0.0"
+                    izz="${(1/2) * mass * (radius*radius)}" />
+        </inertial>
+    </xacro:macro>
+
+    <!-- definition colors -->
+    <material name = "white">
         <color rgba = "1 1 1 1" />
     </material>
         
-    <material name + "orange">
+    <material name="orange">
         <color rgba = "1 0.3 0.1 1" />
     </material>
 
-    <material name + "blue">
+    <material name = "blue">
         <color rgba = "0.2 0.2 1 1" />
     </material>
 
-    <material name + "black">
+    <material name = "black">
         <color rgba = "0 0 0 1" />
     </material>
+
+    <!-- Base Link -->
 
     <link name = "base_link">
 
     </link>
 
-    <joint name = "chassis" tzpe = "fixed">
-        <parent link = "base_link">
-        <child link = "chassis_link">
-        <origin xyz = "-0.1 0 0">
+    <!-- Chassis Link -->
+
+    <joint name = "chassis_joint" type = "fixed">
+        <parent link = "base_link"/>
+        <child link = "chassis_link"/>
+        <origin xyz = "${-back_to_rear_axel} 0 ${hight_main_robot-0.5*diameter_rear_wheel-size_item}"/>
     </joint>
 
     <link name = "chassis_link">
         <visual>
-            <origin xyz = "0.15 0 0.075"/>
+            <origin xyz = "${size_item/2} 0 ${size_item/2}"/>
             <geometry>
-                <box size = "0.3 0.3 0.15">
+                <box size = "${size_item} ${width_chassis} ${size_item}"/>
             </geometry>
+            <material name = "white"/>
         </visual>
+       <xacro:inertial_box mass="0.5" x="${size_item}" y="${width_chassis}" z="${size_item}">
+            <origin xyz="${size_item/2} 0 ${size_item/2}"  rpy="0 0 0"/>
+        </xacro:inertial_box>
+
+        <visual>
+            <origin xyz = "${length_chassis-size_item/2} 0 ${size_item/2}"/>
+            <geometry>
+                <box size = "${size_item} ${width_chassis} ${size_item}"/>
+            </geometry>
+            <material name = "white"/>
+        </visual>
+        <xacro:inertial_box mass="0.5" x="${size_item}" y="${width_chassis}" z="${size_item}">
+            <origin xyz="${length_chassis-size_item/2} 0 ${size_item/2}"  rpy="0 0 0"/>
+        </xacro:inertial_box>
+
+
+        <visual>
+            <origin xyz = "${length_chassis/2} ${width_chassis/2-size_item/2} ${size_item/2}"/>
+            <geometry>
+                <box size = "${length_chassis-2*size_item} ${size_item} ${size_item}"/>
+            </geometry>
+            <material name = "white"/>
+        </visual>
+        <xacro:inertial_box mass="0.5" x="${length_chassis-2*size_item}" y="${size_item}" z="${size_item}">
+            <origin xyz="${length_chassis/2} ${width_chassis/2-size_item/2} ${size_item/2}"  rpy="0 0 0"/>
+        </xacro:inertial_box>
+
+
+        <visual>
+            <origin xyz = "${length_chassis/2} ${-width_chassis/2+size_item/2} ${size_item/2}"/>
+            <geometry>
+                <box size = "${length_chassis-2*size_item} ${size_item} ${size_item}"/>
+            </geometry>
+            <material name = "white"/>
+        </visual>
+        <xacro:inertial_box mass="0.5" x="${length_chassis-2*size_item}" y="${size_item}" z="${size_item}">
+            <origin xyz="${length_chassis/2} ${-width_chassis/2+size_item/2} ${size_item/2}"  rpy="0 0 0"/>
+        </xacro:inertial_box>
+
+
+        <visual>
+            <origin xyz = "${back_to_rear_axel+0.3*diameter_rear_wheel} ${width_chassis/2-size_item/2} ${-0.75*size_item}"/>
+            <geometry>
+                <box size = "${1.1*diameter_rear_wheel} ${size_item} ${1.5*size_item}"/>
+            </geometry>
+            <material name = "white"/>
+        </visual>  
+        <xacro:inertial_box mass="0.5" x="${1.1*diameter_rear_wheel}" y="${size_item}" z="${1.5*size_item}">
+            <origin xyz="${back_to_rear_axel+0.3*diameter_rear_wheel} ${width_chassis/2-size_item/2} ${-0.75*size_item}"  rpy="0 0 0"/>
+        </xacro:inertial_box>
+        
+            
+        <visual>
+            <origin xyz = "${back_to_rear_axel+0.3*diameter_rear_wheel} ${-width_chassis/2+size_item/2} ${-0.75*size_item}"/>
+            <geometry>
+                <box size = "${1.1*diameter_rear_wheel} ${size_item} ${1.5*size_item}"/>
+            </geometry>
+            <material name = "white"/>
+        </visual>  
+        <xacro:inertial_box mass="0.5" x="${1.1*diameter_rear_wheel}" y="${size_item}" z="${1.5*size_item}">
+            <origin xyz="${back_to_rear_axel+0.3*diameter_rear_wheel} ${-width_chassis/2+size_item/2} ${-0.75*size_item}"  rpy="0 0 0"/>
+        </xacro:inertial_box>
+        
+         
+
+        <visual>
+            <origin xyz = "${length_chassis-size_item} ${width_chassis/2-size_item} ${-hight_main_robot/2+diameter_front_wheel/4+size_item}"/>
+            <geometry>
+                <cylinder radius = "${diameter_front_wheel/4}" length = "${hight_main_robot-diameter_front_wheel/2}"/>
+            </geometry>
+            <material name = "white"/>
+        </visual>  
+        <xacro:inertial_cylinder mass="0.5" length = "${hight_main_robot-diameter_front_wheel/2}" radius = "${diameter_front_wheel/4}">
+            <origin xyz="${length_chassis-size_item} ${width_chassis/2-size_item} ${-hight_main_robot/2+diameter_front_wheel/4+size_item}"  rpy="0 0 0"/>
+        </xacro:inertial_cylinder> 
+        
+            
+        <visual>
+            <origin xyz = "${length_chassis-size_item} ${-width_chassis/2+size_item} ${-hight_main_robot/2+diameter_front_wheel/4+size_item}"/>
+            <geometry>
+                <cylinder radius = "${diameter_front_wheel/4}" length = "${hight_main_robot-diameter_front_wheel/2}"/>
+            </geometry>
+            <material name = "white"/>
+        </visual>  
+        <xacro:inertial_cylinder mass="0.5" length = "${hight_main_robot-diameter_front_wheel/2}" radius = "${diameter_front_wheel/4}">
+            <origin xyz="${length_chassis-size_item} ${-width_chassis/2+size_item} ${-hight_main_robot/2+diameter_front_wheel/4+size_item}"  rpy="0 0 0"/>
+        </xacro:inertial_cylinder> 
+        
+         
+        <visual>
+            <origin xyz = "${length_chassis*2/3} 0 ${0.5*size_item}"/>
+            <geometry>
+                <box size = "${length_chassis/4} ${width_chassis} ${0.7*size_item}"/>
+            </geometry>
+            <material name = "white"/>
+        </visual>  
+        <xacro:inertial_box mass="1" x="${length_chassis/4}" y="${width_chassis}" z="${0.7*size_item}">
+            <origin xyz="${length_chassis*2/3} 0 ${0.5*size_item}"  rpy="0 0 0"/>
+        </xacro:inertial_box>
+        
+         
+        <collision>
+            <origin xyz = "${length_chassis/2} 0 ${-hight_main_robot/2+size_item+diameter_front_wheel/4}"/>
+            <geometry>
+                <box size = "${length_chassis} ${width_chassis} ${hight_main_robot-diameter_front_wheel/2}"/>
+            </geometry>
+        </collision>
     </link>
 
+    <gazebo reference = "chassis_link">
+        <material>Gazebo/White</material>
+    </gazebo>
+
+    <!-- LEFT WHEEL -->
+
+    <joint name="left_wheel_joint" type="continuous">
+        <parent link="base_link"/>
+        <child link="left_wheel"/>
+        <origin xyz="0 ${width_chassis/2+width_rear_wheel/2} 0" rpy="-${pi/2} 0 0"/>
+        <axis xyz="0 0 1"/>
+    </joint>
+
+    <link name="left_wheel">
+        <visual>
+            <geometry>
+                <cylinder length="${width_rear_wheel}" radius="${diameter_rear_wheel/2}" />
+            </geometry>
+            <material name="blue"/>
+        </visual>
+        <xacro:inertial_cylinder mass="0.1" length="${width_rear_wheel}" radius="${diameter_rear_wheel/2}">
+            <origin xyz="0 0 0" rpy="0 0 0"/>
+        </xacro:inertial_cylinder> 
+        <collision>
+            <geometry>
+                <cylinder length="${width_rear_wheel}" radius="${diameter_rear_wheel/2}" />
+            </geometry>
+        </collision>
+    </link>
+
+    <gazebo reference = "left_wheel">
+        <material>Gazebo/Blue</material>
+    </gazebo>
 
 
+    <!-- RIGHT WHEEL -->
+
+    <joint name="right_wheel_joint" type="continuous">
+        <parent link="base_link"/>
+        <child link="right_wheel"/>
+        <origin xyz="0 ${-width_chassis/2-width_rear_wheel/2} 0" rpy="${pi/2} 0 0"/>
+        <axis xyz="0 0 -1"/>
+    </joint>
+
+    <link name="right_wheel">
+        <visual>
+            <geometry>
+                <cylinder length="${width_rear_wheel}" radius="${diameter_rear_wheel/2}" />
+            </geometry>
+            <material name="blue"/>
+        </visual>
+        <xacro:inertial_cylinder mass="0.1" length="${width_rear_wheel}" radius="${diameter_rear_wheel/2}">
+            <origin xyz="0 0 0" rpy="0 0 0"/>
+        </xacro:inertial_cylinder>
+        <collision>
+            <geometry>
+                <cylinder length="${width_rear_wheel}" radius="${diameter_rear_wheel/2}" />
+            </geometry>
+        </collision>
+    </link>
+
+    <gazebo reference = "right_wheel">
+        <material>Gazebo/Blue</material>
+    </gazebo> 
+
+    <!-- CASTER WHEEL -->
+
+    <joint name="caster_wheel_joint" type="fixed">
+        <parent link="chassis_link"/>
+        <child link="caster_wheel"/>
+        <origin xyz = "${length_chassis-size_item} 0 ${-hight_main_robot+diameter_front_wheel/2+size_item}"/>
+    </joint>
+
+    <link name="caster_wheel">
+        <visual>
+            <origin xyz = "0 ${-width_chassis/2+size_item} 0" rpy="${pi/2} 0 0"/>
+            <geometry>
+                <cylinder radius="${diameter_front_wheel/2}" length = "${diameter_front_wheel/2}"/>
+            </geometry>
+            <material name="black"/>
+        </visual>
+        <xacro:inertial_cylinder mass="0.1" length="${diameter_front_wheel/2}" radius="${diameter_front_wheel/2}">
+            <origin xyz = "0 ${-width_chassis/2+size_item} 0" rpy="${pi/2} 0 0"/>
+        </xacro:inertial_cylinder> 
+        <visual>
+            <origin xyz = "0 ${width_chassis/2-size_item} 0" rpy="${pi/2} 0 0"/>
+            <geometry>
+                <cylinder radius="${diameter_front_wheel/2}" length = "${diameter_front_wheel/2}"/>
+            </geometry>
+            <material name="black"/>
+        </visual>
+        <xacro:inertial_cylinder mass="0.1" length="${diameter_front_wheel/2}" radius="${diameter_front_wheel/2}">
+            <origin xyz = "0 ${width_chassis/2-size_item} 0" rpy="${pi/2} 0 0"/>
+        </xacro:inertial_cylinder> 
+        <collision>
+            <origin xyz = "0 ${-width_chassis/2+size_item} 0" rpy="${pi/2} 0 0"/>
+            <geometry>
+                <cylinder radius="${diameter_front_wheel/2}" length = "${diameter_front_wheel/2}"/>
+            </geometry>
+        </collision>
+        <collision>
+            <origin xyz = "0 ${width_chassis/2-size_item} 0" rpy="${pi/2} 0 0"/>
+            <geometry>
+                <cylinder radius="${diameter_front_wheel/2}" length = "${diameter_front_wheel/2}"/>
+            </geometry>
+        </collision>
+    </link>
+
+    <gazebo reference = "caster_wheel">
+        <material>Gazebo/Black</material>
+        <mu1 value="0.0001"/>
+        <mu2 value="0.0001"/>
+    </gazebo> 
+
+
+
+    <!-- Sensor Tower Link -->
+
+    <joint name = "sensor_tower_joint" type = "fixed">
+        <parent link = "chassis_link"/>
+        <child link = "sensor_tower_link"/>
+        <origin xyz = "${length_chassis-1.5*size_item} 0 ${hight_sensor_tower/2}"/>
+    </joint>
+
+    <link name = "sensor_tower_link">
+        <visual>
+            <geometry>
+                <box size = "${size_item} ${size_item} ${hight_sensor_tower}"/>
+            </geometry>
+            <material name = "white"/>
+        </visual>
+       <xacro:inertial_box mass="0.5" x="${size_item}" y="${size_item}" z="${hight_sensor_tower}">
+            <origin xyz= "0 0 0"  rpy="0 0 0"/>
+        </xacro:inertial_box>
+
+     
+        <collision>
+            <geometry>
+                <box size = "${size_item} ${size_item} ${hight_sensor_tower}"/>
+            </geometry>
+        </collision>
+    </link>
+
+    <gazebo reference = "sensor_tower_link">
+        <material>Gazebo/White</material>
+    </gazebo>
+    <!-- Camera Link -->
+    <joint name = "camera_joint" type = "fixed">
+        <parent link = "sensor_tower_link"/>
+        <child link = "camera_link"/>
+        <origin xyz = "${size_item*5/6} 0 0"/>
+    </joint>
+
+    <link name = "camera_link">
+        <visual>
+            <origin xyz = "${-size_item/6} 0 0"/>
+            <geometry>
+                <box size = "${size_item/3} ${size_item} ${size_item}"/>
+            </geometry>
+            <material name = "orange"/>
+        </visual>
+       <xacro:inertial_box mass="0.2" x="${size_item*2/3}" y="${size_item}" z="${size_item}">
+            <origin xyz= "0 0 0"  rpy="0 0 0"/>
+        </xacro:inertial_box>
+        <visual>
+            <origin xyz = "${size_item/6} 0 0" rpy="0 ${pi/2} 0"/>
+            <geometry>
+                <cylinder radius="${size_item/3}" length = "${size_item/3}"/>
+            </geometry>
+            <material name = "orange"/>
+        </visual>
+     
+        <collision>
+            <geometry>
+                <box size = "${size_item*2/3} ${size_item} ${size_item}"/>
+            </geometry>
+        </collision>
+    </link>
+
+    <gazebo reference = "camera_link">
+        <material>Gazebo/Orange</material>
+    </gazebo>
+
+    <!-- Lidar Link -->
+    <joint name = "lidar_joint" type = "fixed">
+        <parent link = "sensor_tower_link"/>
+        <child link = "lidar_link"/>
+        <origin xyz = "${-size_item} 0 ${hight_sensor_tower/2}"/>
+    </joint>
+
+    <link name = "lidar_link">
+        <visual>
+            <origin xyz = "0 0 ${-size_item/4}"/>
+            <geometry>
+                <box size = "${size_item*3} ${size_item*2} ${size_item/2}"/>
+            </geometry>
+            <material name = "orange"/>
+        </visual>
+       <xacro:inertial_box mass="0.2" x="${size_item*3}" y="${size_item*2}" z="${size_item*7/6}">
+            <origin xyz= "0 0 ${-size_item/12}"  rpy="0 0 0"/>
+        </xacro:inertial_box>
+        <visual>
+            <origin xyz = "0 0 ${size_item/4}" rpy="0 0 0"/>
+            <geometry>
+                <cylinder radius="${size_item*0.75}" length = "${size_item*2/3}"/>
+            </geometry>
+            <material name = "orange"/>
+        </visual>
+     
+        <collision>
+            <origin xyz= "0 0 ${-size_item/12}"  rpy="0 0 0"/>
+            <geometry>
+                <box size = "${size_item*3} ${size_item*2} ${size_item*7/6}"/>
+            </geometry>
+        </collision>
+    </link>
+
+    <gazebo reference = "lidar_link">
+        <material>Gazebo/Green</material>
+    </gazebo>
 </robot>
+
+
