@@ -12,9 +12,9 @@
     <xacro:property name = "hight_main_robot" value = "0.1"/>
     <xacro:property name = "diameter_rear_wheel" value = "0.083"/>
     <xacro:property name = "width_rear_wheel" value = "0.0675"/>
-    <xacro:property name = "back_to_rear_axel" value = "0.1"/>
+    <xacro:property name = "back_to_rear_axel" value = "0.08"/>
     <xacro:property name = "diameter_front_wheel" value = "0.049"/>
-    <xacro:property name = "hight_sensor_tower" value = "0.20"/>
+    <xacro:property name = "hight_sensor_tower" value = "0.305"/>
 
 
     <!-- definition colors -->
@@ -52,7 +52,9 @@
         <origin xyz = "${-back_to_rear_axel} 0 ${hight_main_robot-0.5*diameter_rear_wheel-size_item}"/>
     </joint>
 
+    
     <link name = "chassis_link">
+        <!-- ITEM Hinten -->
         <visual>
             <origin xyz = "${size_item/2} 0 ${size_item/2}"/>
             <geometry>
@@ -60,10 +62,11 @@
             </geometry>
             <material name = "white"/>
         </visual>
-       <xacro:inertial_box mass="0.5" x="${size_item}" y="${width_chassis}" z="${size_item}">
+       <xacro:inertial_box mass="0.25" x="${size_item}" y="${width_chassis}" z="${size_item}">
             <origin xyz="${size_item/2} 0 ${size_item/2}"  rpy="0 0 0"/>
         </xacro:inertial_box>
 
+        <!-- ITEM Vorne -->
         <visual>
             <origin xyz = "${length_chassis-size_item/2} 0 ${size_item/2}"/>
             <geometry>
@@ -71,11 +74,11 @@
             </geometry>
             <material name = "white"/>
         </visual>
-        <xacro:inertial_box mass="0.5" x="${size_item}" y="${width_chassis}" z="${size_item}">
+        <xacro:inertial_box mass="0.25" x="${size_item}" y="${width_chassis}" z="${size_item}">
             <origin xyz="${length_chassis-size_item/2} 0 ${size_item/2}"  rpy="0 0 0"/>
         </xacro:inertial_box>
 
-
+        <!-- ITEM Links -->
         <visual>
             <origin xyz = "${length_chassis/2} ${width_chassis/2-size_item/2} ${size_item/2}"/>
             <geometry>
@@ -83,11 +86,11 @@
             </geometry>
             <material name = "white"/>
         </visual>
-        <xacro:inertial_box mass="0.5" x="${length_chassis-2*size_item}" y="${size_item}" z="${size_item}">
+        <xacro:inertial_box mass="0.25" x="${length_chassis-2*size_item}" y="${size_item}" z="${size_item}">
             <origin xyz="${length_chassis/2} ${width_chassis/2-size_item/2} ${size_item/2}"  rpy="0 0 0"/>
         </xacro:inertial_box>
 
-
+        <!-- ITEM Rechts -->
         <visual>
             <origin xyz = "${length_chassis/2} ${-width_chassis/2+size_item/2} ${size_item/2}"/>
             <geometry>
@@ -95,36 +98,35 @@
             </geometry>
             <material name = "white"/>
         </visual>
-        <xacro:inertial_box mass="0.5" x="${length_chassis-2*size_item}" y="${size_item}" z="${size_item}">
+        <xacro:inertial_box mass="0.25" x="${length_chassis-2*size_item}" y="${size_item}" z="${size_item}">
             <origin xyz="${length_chassis/2} ${-width_chassis/2+size_item/2} ${size_item/2}"  rpy="0 0 0"/>
         </xacro:inertial_box>
 
-
+        <!-- Motor und Radhalterung Links -->
         <visual>
-            <origin xyz = "${back_to_rear_axel+0.3*diameter_rear_wheel} ${width_chassis/2-size_item/2} ${-0.75*size_item}"/>
+            <origin xyz = "${back_to_rear_axel+0.5*diameter_rear_wheel} ${width_chassis/2-size_item/2} ${-0.75*size_item}"/>
             <geometry>
-                <box size = "${1.1*diameter_rear_wheel} ${size_item} ${1.5*size_item}"/>
+                <box size = "${1.25*diameter_rear_wheel} ${size_item} ${1.5*size_item}"/>
             </geometry>
             <material name = "white"/>
         </visual>  
-        <xacro:inertial_box mass="0.5" x="${1.1*diameter_rear_wheel}" y="${size_item}" z="${1.5*size_item}">
-            <origin xyz="${back_to_rear_axel+0.3*diameter_rear_wheel} ${width_chassis/2-size_item/2} ${-0.75*size_item}"  rpy="0 0 0"/>
+        <xacro:inertial_box mass="0.3" x="${1.25*diameter_rear_wheel}" y="${size_item}" z="${1.5*size_item}">
+            <origin xyz="${back_to_rear_axel+0.5*diameter_rear_wheel} ${width_chassis/2-size_item/2} ${-0.75*size_item}"  rpy="0 0 0"/>
         </xacro:inertial_box>
         
-            
+        <!-- Motor und Radhalterung Rechts -->
         <visual>
-            <origin xyz = "${back_to_rear_axel+0.3*diameter_rear_wheel} ${-width_chassis/2+size_item/2} ${-0.75*size_item}"/>
+            <origin xyz = "${back_to_rear_axel+0.5*diameter_rear_wheel} ${-width_chassis/2+size_item/2} ${-0.75*size_item}"/>
             <geometry>
-                <box size = "${1.1*diameter_rear_wheel} ${size_item} ${1.5*size_item}"/>
+                <box size = "${1.25*diameter_rear_wheel} ${size_item} ${1.5*size_item}"/>
             </geometry>
             <material name = "white"/>
         </visual>  
-        <xacro:inertial_box mass="0.5" x="${1.1*diameter_rear_wheel}" y="${size_item}" z="${1.5*size_item}">
-            <origin xyz="${back_to_rear_axel+0.3*diameter_rear_wheel} ${-width_chassis/2+size_item/2} ${-0.75*size_item}"  rpy="0 0 0"/>
+        <xacro:inertial_box mass="0.3" x="${1.25*diameter_rear_wheel}" y="${size_item}" z="${1.5*size_item}">
+            <origin xyz="${back_to_rear_axel+0.5*diameter_rear_wheel} ${-width_chassis/2+size_item/2} ${-0.75*size_item}"  rpy="0 0 0"/>
         </xacro:inertial_box>
         
-         
-
+        <!-- Stuetzradhalterung Links -->
         <visual>
             <origin xyz = "${length_chassis-size_item} ${width_chassis/2-size_item} ${-hight_main_robot/2+diameter_front_wheel/4+size_item}"/>
             <geometry>
@@ -132,11 +134,11 @@
             </geometry>
             <material name = "white"/>
         </visual>  
-        <xacro:inertial_cylinder mass="0.5" length = "${hight_main_robot-diameter_front_wheel/2}" radius = "${diameter_front_wheel/4}">
+        <xacro:inertial_cylinder mass="0.1" length = "${hight_main_robot-diameter_front_wheel/2}" radius = "${diameter_front_wheel/4}">
             <origin xyz="${length_chassis-size_item} ${width_chassis/2-size_item} ${-hight_main_robot/2+diameter_front_wheel/4+size_item}"  rpy="0 0 0"/>
         </xacro:inertial_cylinder> 
         
-            
+        <!-- Stuetzradhalterung Rechts -->            
         <visual>
             <origin xyz = "${length_chassis-size_item} ${-width_chassis/2+size_item} ${-hight_main_robot/2+diameter_front_wheel/4+size_item}"/>
             <geometry>
@@ -144,20 +146,20 @@
             </geometry>
             <material name = "white"/>
         </visual>  
-        <xacro:inertial_cylinder mass="0.5" length = "${hight_main_robot-diameter_front_wheel/2}" radius = "${diameter_front_wheel/4}">
+        <xacro:inertial_cylinder mass="0.1" length = "${hight_main_robot-diameter_front_wheel/2}" radius = "${diameter_front_wheel/4}">
             <origin xyz="${length_chassis-size_item} ${-width_chassis/2+size_item} ${-hight_main_robot/2+diameter_front_wheel/4+size_item}"  rpy="0 0 0"/>
         </xacro:inertial_cylinder> 
         
-         
+        <!-- Komponententraeger -->
         <visual>
-            <origin xyz = "${length_chassis*2/3} 0 ${0.5*size_item}"/>
+            <origin xyz = "${length_chassis*2/3} 0 0"/>
             <geometry>
-                <box size = "${length_chassis/4} ${width_chassis} ${0.7*size_item}"/>
+                <box size = "${length_chassis/3} ${width_chassis-1*size_item} ${size_item}"/>
             </geometry>
             <material name = "white"/>
         </visual>  
-        <xacro:inertial_box mass="1" x="${length_chassis/4}" y="${width_chassis}" z="${0.7*size_item}">
-            <origin xyz="${length_chassis*2/3} 0 ${0.5*size_item}"  rpy="0 0 0"/>
+        <xacro:inertial_box mass="0.5" x="${length_chassis/3}" y="${width_chassis-1*size_item}" z="${size_item}">
+            <origin xyz="${length_chassis*2/3} 0 0"  rpy="0 0 0"/>
         </xacro:inertial_box>
         
          
@@ -189,7 +191,7 @@
             </geometry>
             <material name="blue"/>
         </visual>
-        <xacro:inertial_cylinder mass="0.1" length="${width_rear_wheel}" radius="${diameter_rear_wheel/2}">
+        <xacro:inertial_cylinder mass="0.15" length="${width_rear_wheel}" radius="${diameter_rear_wheel/2}">
             <origin xyz="0 0 0" rpy="0 0 0"/>
         </xacro:inertial_cylinder> 
         <collision>
@@ -220,7 +222,7 @@
             </geometry>
             <material name="blue"/>
         </visual>
-        <xacro:inertial_cylinder mass="0.1" length="${width_rear_wheel}" radius="${diameter_rear_wheel/2}">
+        <xacro:inertial_cylinder mass="0.15" length="${width_rear_wheel}" radius="${diameter_rear_wheel/2}">
             <origin xyz="0 0 0" rpy="0 0 0"/>
         </xacro:inertial_cylinder>
         <collision>
@@ -260,7 +262,7 @@
             </geometry>
             <material name="black"/>
         </visual>
-        <xacro:inertial_cylinder mass="0.1" length="${diameter_front_wheel/2}" radius="${diameter_front_wheel/2}">
+        <xacro:inertial_cylinder mass="0.15" length="${diameter_front_wheel/2}" radius="${diameter_front_wheel/2}">
             <origin xyz = "0 ${width_chassis/2-size_item} 0" rpy="${pi/2} 0 0"/>
         </xacro:inertial_cylinder> 
         <collision>
@@ -300,7 +302,7 @@
             </geometry>
             <material name = "white"/>
         </visual>
-       <xacro:inertial_box mass="0.5" x="${size_item}" y="${size_item}" z="${hight_sensor_tower}">
+       <xacro:inertial_box mass="0.25" x="${size_item}" y="${size_item}" z="${hight_sensor_tower}">
             <origin xyz= "0 0 0"  rpy="0 0 0"/>
         </xacro:inertial_box>
 
@@ -330,7 +332,7 @@
             </geometry>
             <material name = "orange"/>
         </visual>
-       <xacro:inertial_box mass="0.2" x="${size_item*2/3}" y="${size_item}" z="${size_item}">
+       <xacro:inertial_box mass="0.025" x="${size_item*2/3}" y="${size_item}" z="${size_item}">
             <origin xyz= "0 0 0"  rpy="0 0 0"/>
         </xacro:inertial_box>
         <visual>
@@ -356,7 +358,7 @@
     <joint name = "lidar_joint" type = "fixed">
         <parent link = "sensor_tower_link"/>
         <child link = "lidar_link"/>
-        <origin xyz = "${-size_item} 0 ${hight_sensor_tower/2}"/>
+        <origin xyz = "${-2*size_item} 0 ${hight_sensor_tower/2}"/>
     </joint>
 
     <link name = "lidar_link">
@@ -367,7 +369,7 @@
             </geometry>
             <material name = "green"/>
         </visual>
-       <xacro:inertial_box mass="0.2" x="${size_item*3}" y="${size_item*2}" z="${size_item*7/6}">
+       <xacro:inertial_box mass="0.1" x="${size_item*3}" y="${size_item*2}" z="${size_item*7/6}">
             <origin xyz= "0 0 ${-size_item/12}"  rpy="0 0 0"/>
         </xacro:inertial_box>
         <visual>
@@ -375,7 +377,7 @@
             <geometry>
                 <cylinder radius="${size_item*0.75}" length = "${size_item*2/3}"/>
             </geometry>
-            <material name = "green"/>
+            <material name = "orange"/>
         </visual>
      
         <collision>
