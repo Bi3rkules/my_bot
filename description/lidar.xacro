@@ -37,7 +37,7 @@
             <geometry>
                 <box size = "${size_item*3} ${size_item*2} ${size_item*7/6}"/>
             </geometry>
-        </collision>
+        </collision> 
     </link>
 
     <gazebo reference = "laser_link">
