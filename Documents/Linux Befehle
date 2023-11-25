@@ -7,7 +7,7 @@ Roboter:
 	Befehle die vor Start der Robotersimulation ausgefuehrt werden muessen (source and build workspac):
 		robotic@robotic:~/dev_ws$ colcon build --symlink-install
 		// Muss nur beim ersten Mal gemacht werden und immer wenn eine neue datei im Workspace hinzugefuegt wurde
-		robotic@robotic:~/dev_ws$ source install/setup.bash
+		robotic@robotic:~/dev_ws$ c
 		// Source Workspace
 		// (robotic@robotic:~/dev_ws$ source /opt/ros/foxy/setup.bash)
 			
